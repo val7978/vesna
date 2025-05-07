@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Вход{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style3.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <div class="login-container">
+        <h1>Войти</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="id_username">Логин</label>
+                {{ form.username }}
+            </div>
+
+            <div class="input-group">
+                <label for="id_password">Пароль</label>
+                {{ form.password }}
+            </div>
+
+            <div class="forgot-password">
+                <a href="{% url 'password_reset' %}">Забыли пароль?</a>
+            </div>
+
+            <button type="submit" class="login-button">Войти</button>
+        </form>
+
+        <div class="register-link">
+            <a href="{% url 'register' %}">Зарегистрироваться</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

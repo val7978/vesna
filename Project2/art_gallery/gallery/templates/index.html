@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero-section mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4">Discover Unique Artworks</h1>
+                <p class="lead">Find the perfect piece for your collection from talented artists worldwide.</p>
+                <a href="{% url 'search' %}" class="btn btn-primary btn-lg">Browse Artworks</a>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static 'img/hero-image.jpg' %}" alt="Art Gallery" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="mb-5">
+    <h2 class="text-center mb-4">Featured Categories</h2>
+    <div class="row">
+        {% for category in categories %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.name }}</h5>
+                    <p class="card-text">{{ category.description|truncatewords:15 }}</p>
+                    <a href="{% url 'category' category.slug %}" class="btn btn-outline-primary">View Artworks</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-5">
+    <h2 class="text-center mb-4">New Arrivals</h2>
+    <div class="row">
+        {% for artwork in new_artworks %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="{{ artwork.image.url }}" class="card-img-top" alt="{{ artwork.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ artwork.title }}</h5>
+                    <p class="card-text">by {{ artwork.artist.user.get_full_name|default:artwork.artist.user.username }}</p>
+                    <p class="text-muted">${{ artwork.price }}</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'artwork_detail' artwork.slug %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                    {% if user.is_authenticated %}
+                        <button class="btn btn-sm btn-outline-secondary float-end toggle-favorite" data-artwork-id="{{ artwork.id }}">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-5">
+    <h2 class="text-center mb-4">Featured Artworks</h2>
+    <div class="row">
+        {% for artwork in featured_artworks %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="{{ artwork.image.url }}" class="card-img-top" alt="{{ artwork.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ artwork.title }}</h5>
+                    <p class="card-text">by {{ artwork.artist.user.get_full_name|default:artwork.artist.user.username }}</p>
+                    <p class="text-muted">${{ artwork.price }}</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'artwork_detail' artwork.slug %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                    {% if user.is_authenticated %}
+                        <button class="btn btn-sm btn-outline-secondary float-end toggle-favorite" data-artwork-id="{{ artwork.id }}">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('.toggle-favorite').click(function() {
+        const artworkId = $(this).data('artwork-id');
+        const button = $(this);
+        
+        $.ajax({
+            url: `/toggle-favorite/${artworkId}/`,
+            method: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.action === 'added') {
+                    button.find('i').removeClass('far').addClass('fas');
+                } else {
+                    button.find('i').removeClass('fas').addClass('far');
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация работы{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style3.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <div class="login-container">
+        <h1>Регистрация работы</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="id_title">Название работы</label>
+                {{ form.title }}
+                {{ form.title.errors }}
+            </div>
+
+            <div class="input-group">
+                <label for="id_category">Категория</label>
+                {{ form.category }}
+                {{ form.category.errors }}
+            </div>
+
+            <div class="input-group">
+                <label for="id_description">Описание</label>
+                {{ form.description }}
+                {{ form.description.errors }}
+            </div>
+
+            <div class="input-group">
+                <label for="id_price">Цена (руб)</label>
+                {{ form.price }}
+                {{ form.price.errors }}
+            </div>
+
+            <div class="input-group">
+                <label for="id_image">Изображение работы</label>
+                {{ form.image }}
+                {{ form.image.errors }}
+            </div>
+
+            <div class="input-group">
+                <label for="id_dimensions">Размеры (см)</label>
+                {{ form.dimensions }}
+                {{ form.dimensions.errors }}
+            </div>
+
+            <div class="input-group">
+                <label for="id_materials">Материалы</label>
+                {{ form.materials }}
+                {{ form.materials.errors }}
+            </div>
+
+            <button type="submit" class="login-button">Отправить</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ artwork.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style5.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-img">
+    <div class="container-info">
+        <div class="info-block">
+            <img class="art-img" src="{{ artwork.image.url }}" alt="{{ artwork.title }}" />
+        </div>
+    
+        <div class="info-block">
+            <div class="title-img">{{ artwork.title }}</div><br><br>
+            <a class="author" href="#">{{ artwork.artist.user.get_full_name }}</a><br><br>
+  
+            <div class="buttons-img">
+                <button onclick="toggleFavorite({{ artwork.id }})">
+                    {% if is_favorite %}Удалить из избранного{% else %}Добавить в избранное{% endif %}
+                </button>
+                <button>Поделиться</button>
+            </div>
+            <br><br>
+  
+            <div class="price">Цена: {{ artwork.price }} ₽</div><br><br>
+            <button onclick="addToCart({{ artwork.id }})">Оформить заказ</button>
+        </div>
+    </div>
+  
+    <h2>О работе</h2>
+    <p>{{ artwork.description }}</p>
+  
+    <h2>Характеристики</h2>
+    <p>Год создания работы: {{ artwork.year_created }}</p>
+    <p>Размер: {{ artwork.dimensions }}</p>
+    <p>Категория и техника: {{ artwork.category.name }}, {{ artwork.materials }}</p>
+  
+    <h2>О художнике</h2>
+    <p>{{ artwork.artist.bio }}</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleFavorite(artworkId) {
+    // AJAX запрос для добавления/удаления из избранного
+}
+
+function addToCart(artworkId) {
+    // AJAX запрос для добавления в корзину
+}
+</script>
+{% endblock %}
+        

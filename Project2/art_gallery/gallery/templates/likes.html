@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Избранное{% endblock %}
+
+{% block content %}
+<div class="title-block">
+    <p class="title">Избранное</p>
+</div>    
+
+<div class="favorites-container" id="favoritesContainer">
+    {% for favorite in favorites %}
+    <div class="card">
+        <img src="{{ favorite.artwork.image.url }}" alt="{{ favorite.artwork.title }}">
+        <div class="card-footer">
+            <span class="card-title">{{ favorite.artwork.title }}</span>
+            <span class="card-heart liked" data-id="{{ favorite.artwork.id }}">♥</span>
+        </div>
+    </div>
+    {% empty %}
+    <p>У вас пока нет избранных работ</p>
+    {% endfor %}
+</div>
+{% endblock %}
+        

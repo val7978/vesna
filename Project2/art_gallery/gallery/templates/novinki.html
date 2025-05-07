@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Новинки месяца{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style2.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="title-block">
+    <p class="title">Новинки месяца</p>
+</div>
+
+<div class="gallery">
+    {% for artwork in new_artworks %}
+    <div class="card">
+        <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+        <div class="card-footer">
+            <span class="card-title">{{ artwork.title }}</span>
+            <span class="card-heart" 
+                  data-id="{{ artwork.id }}" 
+                  onclick="toggleFavorite(this)">
+                {% if artwork in user_favorites %}♥{% else %}♡{% endif %}
+            </span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/favorites.js' %}"></script>
+{% endblock %}

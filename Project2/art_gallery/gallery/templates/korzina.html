@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style6.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="title-block">
+    <p class="title">Корзина</p>
+</div>    
+
+<div class="favorites-container" id="favoritesContainer">
+    {% for item in cart_items %}
+    <div class="card">
+        <img src="{{ item.artwork.image.url }}" alt="{{ item.artwork.title }}">
+        <div class="card-footer">
+            <span class="card-title">{{ item.artwork.title }}</span>
+            <span class="card-price">{{ item.artwork.price }} ₽ x {{ item.quantity }}</span>
+            <button onclick="removeFromCart({{ item.id }})">Удалить</button>
+        </div>
+    </div>
+    {% empty %}
+    <p>Ваша корзина пуста</p>
+    {% endfor %}
+    
+    {% if cart_items %}
+    <div class="cart-total">
+        <h3>Итого: {{ total_price }} ₽</h3>
+        <button onclick="location.href='{% url 'checkout' %}'">Оформить заказ</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

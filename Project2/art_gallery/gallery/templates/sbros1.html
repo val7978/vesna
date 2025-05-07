@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Сброс пароля{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style3.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <div class="login-container">
+        <h1>Сброс пароля</h1>
+        <small>Для сброса пароля введите адрес электронной почты, на который был зарегистрирован аккаунт</small>
+        <br><br>
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="id_email">E-mail</label>
+                <input type="email" name="email" id="id_email" placeholder="Введите E-mail" required>
+            </div>
+
+            <button type="submit" class="login-button">Сбросить пароль</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style4.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="title-block">
+    <p class="title">Личный кабинет</p>
+</div>
+
+<div class="content">
+    <div class="profile-info">
+        <img src="{{ user.artist.profile_picture.url|default:'https://via.placeholder.com/40' }}" alt="User Avatar">
+        <p>{{ user.get_full_name|default:user.username }}</p>
+    </div>
+
+    <ul class="menu-list">
+        <li><a href="{% url 'favorites' %}">Избранное</a></li>
+        <li><a href="{% url 'cart' %}">Корзина</a></li>
+        <li><a href="{% url 'delivery' %}">Настройки аккаунта</a></li>
+    </ul>
+
+    <p class="logout-btn" onclick="location.href='{% url 'logout' %}'">Выход</p>
+</div>
+{% endblock %}
+        

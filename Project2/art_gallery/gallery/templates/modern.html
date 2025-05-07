@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Современная живопись{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style2.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="title-block">
+    <p class="title">Современная живопись</p>
+</div>
+
+<div class="gallery">
+    {% for artwork in modern_artworks %}
+    <div class="card">
+        <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+        <div class="card-footer">
+            <span class="card-title">{{ artwork.title }}</span>
+            <span class="card-heart" 
+                  data-id="{{ artwork.id }}" 
+                  onclick="toggleFavorite(this)">
+                {% if artwork in user_favorites %}♥{% else %}♡{% endif %}
+            </span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleFavorite(element) {
+    const artworkId = element.dataset.id;
+    fetch(`/toggle-favorite/${artworkId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'added') {
+            element.innerHTML = '♥';
+        } else {
+            element.innerHTML = '♡';
+        }
+    });
+}
+</script>
+{% endblock %}

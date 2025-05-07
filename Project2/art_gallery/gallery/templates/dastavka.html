@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Личные данные{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style7.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="title-block">
+    <p class="title">Личные данные</p>
+</div>
+
+<div class="dannye-block">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <label>Фамилия<br>{{ form.last_name }}</label>
+            <label>Имя<br>{{ form.first_name }}</label>
+            <label>Отчество<br>{{ form.middle_name }}</label>
+        </div>
+    
+        <div class="form-row">
+            <label>E-mail<br>{{ form.email }}</label>
+            <label>Телефон<br>{{ form.phone }}</label>
+        </div>
+
+        <div class="password-row">
+            <label>Пароль</label>
+            <button type="button" onclick='location.href="{% url "//gallery//urls.py//password_reset" %}"'>Изменить</button>
+        </div>
+    
+        <div class="form-row">
+            <label>Адрес доставки<br>{{ form.shipping_address }}</label>
+        </div>
+    
+        <div class="save-btn">
+            <button type="submit">Сохранить</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Геометрическая абстракция{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style2.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="title-block">
+    <p class="title">Геометрическая абстракция</p>
+</div>
+
+<div class="gallery">
+    {% for artwork in geometric_artworks %}
+    <div class="card">
+        <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+        <div class="card-footer">
+            <span class="card-title">{{ artwork.title }}</span>
+            <span class="card-heart" 
+                  data-id="{{ artwork.id }}" 
+                  data-title="{{ artwork.title }}"
+                  onclick="toggleFavorite(this)">
+                {% if artwork in user_favorites %}♥{% else %}♡{% endif %}
+            </span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

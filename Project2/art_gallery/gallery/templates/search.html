@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Поиск по параметрам{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style1.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="title-block">
+    <p class="title">Поиск по параметрам</p>
+</div>
+
+<div class="search-block">
+    <form method="get" action="{% url 'search' %}">
+        <div class="filter-group">
+            <div class="filter-column">
+                <p class="title-mini">Цена</p>
+                <label><input type="checkbox" name="price_range" value="0-10000"> До 10000 р</label>
+                <label><input type="checkbox" name="price_range" value="10000-50000"> 10000 р – 50000 р</label>
+                <label><input type="checkbox" name="price_range" value="50000-100000"> 50000 р – 100000 р</label>
+                <label><input type="checkbox" name="price_range" value="100000-"> От 100000 р</label>
+            </div>
+        
+            <div class="filter-column">
+                <p class="title-mini">Размер</p><br />
+                Ширина<br />
+                <input type="number" name="width_min" placeholder="От"> 
+                <input type="number" name="width_max" placeholder="До"><br />
+                Высота<br />
+                <input type="number" name="height_min" placeholder="От"> 
+                <input type="number" name="height_max" placeholder="До">
+            </div>
+        
+            <div class="filter-column">
+                <p class="title-mini">Вид искусства</p>
+                {% for category in categories %}
+                <label><input type="checkbox" name="category" value="{{ category.id }}"> {{ category.name }}</label>
+                {% endfor %}
+            </div>
+        
+            <div class="filter-column">
+                <p class="title-mini">Направление</p>
+                {% for style in styles %}
+                <label><input type="checkbox" name="style" value="{{ style.id }}"> {{ style.name }}</label>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="button-block">
+            <div class="buttons">
+                <button type="button" onclick="resetFilters()">Сбросить фильтр</button>
+                <button type="submit">Показать результат</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if artworks %}
+<div class="gallery">
+    {% for artwork in artworks %}
+    <div class="card">
+        <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+        <div class="card-footer">
+            <span class="card-title">{{ artwork.title }}</span>
+            <span class="card-heart" 
+                  data-id="{{ artwork.id }}" 
+                  onclick="toggleFavorite(this)">
+                {% if artwork in user_favorites %}♥{% else %}♡{% endif %}
+            </span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<script>
+    function resetFilters() {
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('input[type="number"]').forEach(input => input.value = "");
+    }
+    
+    function toggleFavorite(element) {
+        const artworkId = element.dataset.id;
+        fetch(`/toggle-favorite/${artworkId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'added') {
+                element.innerHTML = '♥';
+            } else {
+                element.innerHTML = '♡';
+            }
+        });
+    }
+</script>
+{% endblock %}

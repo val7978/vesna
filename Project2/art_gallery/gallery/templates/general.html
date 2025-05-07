@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="tops">
+    <div class="image-container">
+        <a href="{% url 'summer' %}"><img src="{% static 'img/современная живопись.jpg' %}" alt="Современная живопись" class="image"></a>
+        <h2 class="image-text">Современная живопись</h2>
+    </div>
+    
+    <div class="image-container">
+        <a href="{% url 'ideas' %}"><img src="{% static 'img/идеи для подарка.jpg' %}" alt="Идеи для подарка" class="image"></a>
+        <h2 class="image-text">Идеи для подарка</h2>
+    </div>
+</div>
+
+<div class="section">
+    <h3>Новинки месяца ↓</h3>
+    <div class="card">
+        {% for artwork in new_artworks %}
+        <div class="art-card">
+            <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}" />
+            <div class="card-footer">
+                <span class="title">{{ artwork.title }}</span>
+                <span class="heart" onclick="toggleFavorite({{ artwork.id }}, this)">
+                    {% if artwork in user_favorites %}♥{% else %}♡{% endif %}
+                </span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="section">
+    <h3 onclick="location.href='{% url '//gallery//urls.py//summer_art' %}'">Летнее ↓</h3>
+    <div class="scroll-container">
+        {% for artwork in summer_artworks %}
+        <div class="art-card">
+            <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+            <div>{{ artwork.title }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="section">
+    <h3>Геометрическая абстракция ↓</h3>
+    <div class="scroll-container">
+        {% for artwork in geometric_artworks %}
+        <div class="art-card">
+            <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+            <div>{{ artwork.title }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleFavorite(artworkId, element) {
+    fetch(`/toggle-favorite/${artworkId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'added') {
+            element.innerHTML = '♥';
+        } else {
+            element.innerHTML = '♡';
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Сброс пароля{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style3.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <div class="login-container">
+        <h1>Сброс пароля</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="id_new_password1">Новый пароль</label>
+                <input type="password" name="new_password1" id="id_new_password1" placeholder="Введите пароль" required>
+            </div>
+
+            <div class="input-group">
+                <label for="id_new_password2">Подтверждение пароля</label>
+                <input type="password" name="new_password2" id="id_new_password2" placeholder="Введите пароль повторно" required>
+            </div>
+
+            <button type="submit" class="login-button">Изменить пароль</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
